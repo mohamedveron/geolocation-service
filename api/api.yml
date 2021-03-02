@@ -1,0 +1,81 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Phone Numbers Validation by Mohamed Abdel Mohaimen -> mohamedveron23@gmail.com
+components:
+  schemas:
+
+    PhoneNumber:
+      type: object
+      properties:
+        customerName:
+          type: string
+        number:
+          type: string
+
+    PhoneNumbersResponseData:
+      required:
+        - validNumbers
+        - notValidNumbers
+        - code
+        - country
+      properties:
+        validNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        notValidNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        code:
+          type: string
+        country:
+          type: string
+
+
+    QueryResponse:
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumbersResponseData'
+        count:
+          type: number
+        page:
+          type: integer
+        limit:
+          type: integer
+
+    Filters:
+      properties:
+        country:
+          type: string
+        state:
+          type: string
+
+
+
+paths:
+  /phoneNumbers:
+    post:
+      summary: Get all Phone Numbers with filters
+      operationId: getPhoneNumbers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Filters'
+      responses:
+        '200':
+          description: numbers list returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
