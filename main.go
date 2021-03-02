@@ -73,8 +73,16 @@ func main() {
 	}
 	fmt.Println(countInValid, " : ", countValid , " :")*/
 
+	dbSettings := persistence.DBSettings{
+		Host:     "geolocation.czqumefsqwp6.eu-central-1.rds.amazonaws.com",
+		Port:     5432,
+		Username: "postgres",
+		Password: "123456789",
+		DbName:   "postgres",
+	}
+
 	//initialize the service layers
-	persistenceLayer := persistence.NewPersistence("./sample.db")
+	persistenceLayer := persistence.NewPersistence(&dbSettings)
 	serviceLayer := service.NewService(persistenceLayer, "data_dump.csv")
 
 	serviceLayer.DataIngestor()
