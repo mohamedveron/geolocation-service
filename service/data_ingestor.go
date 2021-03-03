@@ -34,7 +34,22 @@ func (s *Service) DataIngestor() (int, int, error) {
 		}
 	}
 
+	s.insertValidLocationsToDB(locations)
+
 	fmt.Println(countInValid, " : ", countValid , " :")
 
 	return countValid, countInValid, nil
+}
+
+func (s *Service) insertValidLocationsToDB(locations []*domains.GeoLocation) error {
+
+	for idx, _ := range locations {
+
+		err := s.persistence.CreateGeoLocation(locations[idx])
+
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
