@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/mohamedveron/geo-location_sdk/domains"
+	"time"
 )
 
 func (s *Service) DataIngestor() (int, int, error) {
@@ -13,6 +14,7 @@ func (s *Service) DataIngestor() (int, int, error) {
 	// pipeline of data ingestion
 	importedData := s.ReadCsvData();
 
+	startTime := time.Now()
 	for idx, _ := range importedData {
 
 		gl := &domains.GeoLocation{}
@@ -28,15 +30,23 @@ func (s *Service) DataIngestor() (int, int, error) {
 
 			s.ipMap[importedData[idx][0]] = true
 
+			if len(locations) < 25000{
+				err := s.persistence.CreateGeoLocation(gl)
+
+				if err != nil {
+					return countValid, countInValid, err
+				}
+			}
+
 			countValid++
 		}else{
 			countInValid++
 		}
 	}
 
-	s.insertValidLocationsToDB(locations)
+	//s.insertValidLocationsToDB(locations)
 
-	fmt.Println(countInValid, " : ", countValid , " :")
+	fmt.Println(countInValid, " : ", countValid , time.Since(startTime) )
 
 	return countValid, countInValid, nil
 }
@@ -50,6 +60,11 @@ func (s *Service) insertValidLocationsToDB(locations []*domains.GeoLocation) err
 		if err != nil {
 			return err
 		}
+
+		if idx >1000 {
+			break
+		}
 	}
+
 	return nil
 }

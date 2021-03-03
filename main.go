@@ -74,11 +74,11 @@ func main() {
 	fmt.Println(countInValid, " : ", countValid , " :")*/
 
 	dbSettings := persistence.DBSettings{
-		Host:     "geolocation.czqumefsqwp6.eu-central-1.rds.amazonaws.com",
+		Host:     "localhost",
 		Port:     5432,
 		Username: "postgres",
-		Password: "123456789",
-		DbName:   "postgres",
+		Password: "123456",
+		DbName:   "entities",
 	}
 
 	//initialize the service layers
