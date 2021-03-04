@@ -53,6 +53,12 @@ func (s *Service) DataIngestor() (int, int, error) {
 
 	close(ch)
 
+	err := errg.Wait()
+	if err != nil {
+		e := "Error while persist locations "
+		return countValid, countInValid, fmt.Errorf("%s: %s", e, err)
+	}
+
 	fmt.Println(countInValid, " : ", countValid , time.Since(startTime) )
 
 	return countValid, countInValid, nil
