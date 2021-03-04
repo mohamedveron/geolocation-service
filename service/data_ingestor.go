@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/mohamedveron/geo-location_sdk/domains"
+	"golang.org/x/sync/errgroup"
 	"time"
 )
 
@@ -13,6 +14,15 @@ func (s *Service) DataIngestor() (int, int, error) {
 
 	// pipeline of data ingestion
 	importedData := s.ReadCsvData();
+
+	ch := make(chan domains.GeoLocation)
+
+	errg := errgroup.Group{}
+	for i := 0; i < 10; i++ {
+		errg.Go(func() error {
+			return s.worker(ch)
+		})
+	}
 
 	startTime := time.Now()
 	for idx, _ := range importedData {
@@ -30,21 +40,18 @@ func (s *Service) DataIngestor() (int, int, error) {
 
 			s.ipMap[importedData[idx][0]] = true
 
-			if len(locations) < 25000{
-				err := s.persistence.CreateGeoLocation(gl)
+			countValid++
 
-				if err != nil {
-					return countValid, countInValid, err
-				}
+			if len(locations) < 180000 {
+				ch <- *gl
 			}
 
-			countValid++
 		}else{
 			countInValid++
 		}
 	}
 
-	//s.insertValidLocationsToDB(locations)
+	close(ch)
 
 	fmt.Println(countInValid, " : ", countValid , time.Since(startTime) )
 
@@ -63,6 +70,20 @@ func (s *Service) insertValidLocationsToDB(locations []*domains.GeoLocation) err
 
 		if idx >1000 {
 			break
+		}
+	}
+
+	return nil
+}
+
+func (s *Service) worker(locations chan domains.GeoLocation) error {
+
+	for location := range locations {
+
+		err := s.persistence.CreateGeoLocation(&location)
+
+		if err != nil {
+			return err
 		}
 	}
 
