@@ -10,7 +10,7 @@ generate:
 
 	@echo :: generating code
 
-	oapi-codegen -package api -generate chi-server,types api/api.yml > api/api.gen.go
+	oapi-codegen -package client -generate client,types api/api.yml > client/client.gen.go
 
 test: generate
 	@echo :: run tests
