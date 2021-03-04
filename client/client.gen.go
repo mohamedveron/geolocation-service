@@ -15,39 +15,26 @@ import (
 	"strings"
 )
 
-// Filters defines model for Filters.
-type Filters struct {
-	Country *string `json:"country,omitempty"`
-	State   *string `json:"state,omitempty"`
+// GeoLocation defines model for GeoLocation.
+type GeoLocation struct {
+	City        *string  `json:"city,omitempty"`
+	Country     *string  `json:"country,omitempty"`
+	CountryCode *string  `json:"countryCode,omitempty"`
+	IpAddress   *string  `json:"ipAddress,omitempty"`
+	Latitude    *float32 `json:"latitude,omitempty"`
+	Longitude   *float32 `json:"longitude,omitempty"`
 }
 
-// PhoneNumber defines model for PhoneNumber.
-type PhoneNumber struct {
-	CustomerName *string `json:"customerName,omitempty"`
-	Number       *string `json:"number,omitempty"`
+// GeoLocationResponseData defines model for GeoLocationResponseData.
+type GeoLocationResponseData struct {
+	Locations []GeoLocation `json:"locations"`
 }
 
-// PhoneNumbersResponseData defines model for PhoneNumbersResponseData.
-type PhoneNumbersResponseData struct {
-	Code            string        `json:"code"`
-	Country         string        `json:"country"`
-	NotValidNumbers []PhoneNumber `json:"notValidNumbers"`
-	ValidNumbers    []PhoneNumber `json:"validNumbers"`
-}
+// GetLocationsJSONBody defines parameters for GetLocations.
+type GetLocationsJSONBody interface{}
 
-// QueryResponse defines model for QueryResponse.
-type QueryResponse struct {
-	Count *float32                   `json:"count,omitempty"`
-	Data  []PhoneNumbersResponseData `json:"data"`
-	Limit *int                       `json:"limit,omitempty"`
-	Page  *int                       `json:"page,omitempty"`
-}
-
-// GetPhoneNumbersJSONBody defines parameters for GetPhoneNumbers.
-type GetPhoneNumbersJSONBody Filters
-
-// GetPhoneNumbersJSONRequestBody defines body for GetPhoneNumbers for application/json ContentType.
-type GetPhoneNumbersJSONRequestBody GetPhoneNumbersJSONBody
+// GetLocationsJSONRequestBody defines body for GetLocations for application/json ContentType.
+type GetLocationsJSONRequestBody GetLocationsJSONBody
 
 // RequestEditorFn  is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -122,14 +109,14 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 
 // The interface specification for the client above.
 type ClientInterface interface {
-	// GetPhoneNumbers request  with any body
-	GetPhoneNumbersWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// GetLocations request  with any body
+	GetLocationsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	GetPhoneNumbers(ctx context.Context, body GetPhoneNumbersJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	GetLocations(ctx context.Context, body GetLocationsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-func (c *Client) GetPhoneNumbersWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetPhoneNumbersRequestWithBody(c.Server, contentType, body)
+func (c *Client) GetLocationsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetLocationsRequestWithBody(c.Server, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -139,8 +126,8 @@ func (c *Client) GetPhoneNumbersWithBody(ctx context.Context, contentType string
 	return c.Client.Do(req)
 }
 
-func (c *Client) GetPhoneNumbers(ctx context.Context, body GetPhoneNumbersJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetPhoneNumbersRequest(c.Server, body)
+func (c *Client) GetLocations(ctx context.Context, body GetLocationsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetLocationsRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -150,19 +137,19 @@ func (c *Client) GetPhoneNumbers(ctx context.Context, body GetPhoneNumbersJSONRe
 	return c.Client.Do(req)
 }
 
-// NewGetPhoneNumbersRequest calls the generic GetPhoneNumbers builder with application/json body
-func NewGetPhoneNumbersRequest(server string, body GetPhoneNumbersJSONRequestBody) (*http.Request, error) {
+// NewGetLocationsRequest calls the generic GetLocations builder with application/json body
+func NewGetLocationsRequest(server string, body GetLocationsJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewGetPhoneNumbersRequestWithBody(server, "application/json", bodyReader)
+	return NewGetLocationsRequestWithBody(server, "application/json", bodyReader)
 }
 
-// NewGetPhoneNumbersRequestWithBody generates requests for GetPhoneNumbers with any type of body
-func NewGetPhoneNumbersRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+// NewGetLocationsRequestWithBody generates requests for GetLocations with any type of body
+func NewGetLocationsRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	queryUrl, err := url.Parse(server)
@@ -170,7 +157,7 @@ func NewGetPhoneNumbersRequestWithBody(server string, contentType string, body i
 		return nil, err
 	}
 
-	basePath := fmt.Sprintf("/phoneNumbers")
+	basePath := fmt.Sprintf("/locations")
 	if basePath[0] == '/' {
 		basePath = basePath[1:]
 	}
@@ -234,20 +221,20 @@ func WithBaseURL(baseURL string) ClientOption {
 
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
-	// GetPhoneNumbers request  with any body
-	GetPhoneNumbersWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader) (*GetPhoneNumbersResponse, error)
+	// GetLocations request  with any body
+	GetLocationsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader) (*GetLocationsResponse, error)
 
-	GetPhoneNumbersWithResponse(ctx context.Context, body GetPhoneNumbersJSONRequestBody) (*GetPhoneNumbersResponse, error)
+	GetLocationsWithResponse(ctx context.Context, body GetLocationsJSONRequestBody) (*GetLocationsResponse, error)
 }
 
-type GetPhoneNumbersResponse struct {
+type GetLocationsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *QueryResponse
+	JSON200      *GeoLocationResponseData
 }
 
 // Status returns HTTPResponse.Status
-func (r GetPhoneNumbersResponse) Status() string {
+func (r GetLocationsResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -255,46 +242,46 @@ func (r GetPhoneNumbersResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r GetPhoneNumbersResponse) StatusCode() int {
+func (r GetLocationsResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
 	return 0
 }
 
-// GetPhoneNumbersWithBodyWithResponse request with arbitrary body returning *GetPhoneNumbersResponse
-func (c *ClientWithResponses) GetPhoneNumbersWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader) (*GetPhoneNumbersResponse, error) {
-	rsp, err := c.GetPhoneNumbersWithBody(ctx, contentType, body)
+// GetLocationsWithBodyWithResponse request with arbitrary body returning *GetLocationsResponse
+func (c *ClientWithResponses) GetLocationsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader) (*GetLocationsResponse, error) {
+	rsp, err := c.GetLocationsWithBody(ctx, contentType, body)
 	if err != nil {
 		return nil, err
 	}
-	return ParseGetPhoneNumbersResponse(rsp)
+	return ParseGetLocationsResponse(rsp)
 }
 
-func (c *ClientWithResponses) GetPhoneNumbersWithResponse(ctx context.Context, body GetPhoneNumbersJSONRequestBody) (*GetPhoneNumbersResponse, error) {
-	rsp, err := c.GetPhoneNumbers(ctx, body)
+func (c *ClientWithResponses) GetLocationsWithResponse(ctx context.Context, body GetLocationsJSONRequestBody) (*GetLocationsResponse, error) {
+	rsp, err := c.GetLocations(ctx, body)
 	if err != nil {
 		return nil, err
 	}
-	return ParseGetPhoneNumbersResponse(rsp)
+	return ParseGetLocationsResponse(rsp)
 }
 
-// ParseGetPhoneNumbersResponse parses an HTTP response from a GetPhoneNumbersWithResponse call
-func ParseGetPhoneNumbersResponse(rsp *http.Response) (*GetPhoneNumbersResponse, error) {
+// ParseGetLocationsResponse parses an HTTP response from a GetLocationsWithResponse call
+func ParseGetLocationsResponse(rsp *http.Response) (*GetLocationsResponse, error) {
 	bodyBytes, err := ioutil.ReadAll(rsp.Body)
 	defer rsp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &GetPhoneNumbersResponse{
+	response := &GetLocationsResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest QueryResponse
+		var dest GeoLocationResponseData
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

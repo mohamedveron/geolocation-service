@@ -5,76 +5,51 @@ info:
 components:
   schemas:
 
-    PhoneNumber:
+    GeoLocation:
       type: object
       properties:
-        customerName:
+        ipAddress:
           type: string
-        number:
-          type: string
-
-    PhoneNumbersResponseData:
-      required:
-        - validNumbers
-        - notValidNumbers
-        - code
-        - country
-      properties:
-        validNumbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/PhoneNumber'
-        notValidNumbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/PhoneNumber'
-        code:
+        countryCode:
           type: string
         country:
           type: string
-
-
-    QueryResponse:
-      required:
-        - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PhoneNumbersResponseData'
-        count:
+        city:
+          type: string
+        latitude:
           type: number
-        page:
-          type: integer
-        limit:
-          type: integer
+          example: 234.2311111
+        longitude:
+          type: number
+          example: -234.2223111
 
-    Filters:
+    GeoLocationResponseData:
+      required:
+        - locations
       properties:
-        country:
-          type: string
-        state:
-          type: string
-
-
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoLocation'
 
 paths:
-  /phoneNumbers:
+  /locations:
     post:
-      summary: Get all Phone Numbers with filters
-      operationId: getPhoneNumbers
+      summary: Get all locations by id address
+      operationId: getLocations
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Filters'
+              ipAddress:
+                type: string
       responses:
         '200':
-          description: numbers list returned
+          description: locations list returned
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QueryResponse'
+                $ref: '#/components/schemas/GeoLocationResponseData'
         '400':
           description: Bad request
         '500':
