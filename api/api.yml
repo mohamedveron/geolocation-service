@@ -36,7 +36,7 @@ components:
       required:
         - locations
       properties:
-        ipAddress:
+        ip_address:
           type: string
 
 paths:

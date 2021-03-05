@@ -1,14 +1,14 @@
 package persistence
 
 import (
-	"fmt"
 	"github.com/mohamedveron/geolocation-service/domains"
 )
 
-func (db *Persistence) GetLocationsByIP() ([]domains.GeoLocation, error) {
+func (db *Persistence) GetLocationsByIP(ip_address string) ([]domains.GeoLocation, error) {
+
 	locationsList := []domains.GeoLocation{}
 
-	rows, err := db.database.Query("SELECT ip_address, country, country_code, city  FROM geolocation")
+	rows, err := db.database.Query("SELECT ip_address, country, country_code, city  FROM geolocation WHERE ip_address = $1", ip_address)
 
 	if err != nil {
 		return locationsList, err
@@ -22,11 +22,12 @@ func (db *Persistence) GetLocationsByIP() ([]domains.GeoLocation, error) {
 	for rows.Next() {
 		p := domains.GeoLocation{}
 		rows.Scan(&ip, &country, &country_code, &city)
-		fmt.Print("here" + ip + country)
+
 		p.IpAddress = ip
 		p.Country = country
 		p.CountryCode = country_code
 		p.City = city
+
 		locationsList = append(locationsList, p)
 	}
 
