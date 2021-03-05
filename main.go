@@ -25,8 +25,8 @@ func main() {
 
 	// start the importing process
 
-	//numberOfGoroutines := 10
-	//serviceLayer.RunDataIngestor(numberOfGoroutines)
+	numberOfGoroutines := 10
+	serviceLayer.RunDataIngestor(numberOfGoroutines)
 	server := api.NewServer(serviceLayer)
 
 	// prepare router

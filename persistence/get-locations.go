@@ -11,7 +11,7 @@ func (db *Persistence) GetLocationsByIP(ip_address string) ([]domains.GeoLocatio
 	rows, err := db.database.Query("SELECT ip_address, country, country_code, city  FROM geolocation WHERE ip_address = $1", ip_address)
 
 	if err != nil {
-		return locationsList, err
+		return nil, err
 	}
 
 	var ip string

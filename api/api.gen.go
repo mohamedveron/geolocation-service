@@ -21,7 +21,7 @@ type GeoLocation struct {
 
 // GeoLocationRequestData defines model for GeoLocationRequestData.
 type GeoLocationRequestData struct {
-	IpAddress *string `json:"ipAddress,omitempty"`
+	IpAddress *string `json:"ip_address,omitempty"`
 }
 
 // GeoLocationResponseData defines model for GeoLocationResponseData.
