@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/go-chi/chi"
+	"github.com/mohamedveron/geolocation-service/api"
 	"github.com/mohamedveron/geolocation-service/persistence"
 	"github.com/mohamedveron/geolocation-service/service"
 	"net/http"
@@ -26,10 +27,13 @@ func main() {
 
 	numberOfGoroutines := 10
 	serviceLayer.RunDataIngestor(numberOfGoroutines)
-	//server := api.NewServer(serviceLayer)
+	server := api.NewServer(serviceLayer)
 
 	// prepare router
 	r := chi.NewRouter()
+	r.Route("/", func(r chi.Router) {
+		r.Mount("/", api.Handler(server))
+	})
 
 	srv := &http.Server{
 		Handler: r,

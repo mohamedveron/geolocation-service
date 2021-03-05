@@ -25,13 +25,18 @@ type GeoLocation struct {
 	Longitude   *float32 `json:"longitude,omitempty"`
 }
 
+// GeoLocationRequestData defines model for GeoLocationRequestData.
+type GeoLocationRequestData struct {
+	IpAddress *string `json:"ipAddress,omitempty"`
+}
+
 // GeoLocationResponseData defines model for GeoLocationResponseData.
 type GeoLocationResponseData struct {
 	Locations []GeoLocation `json:"locations"`
 }
 
 // GetLocationsJSONBody defines parameters for GetLocations.
-type GetLocationsJSONBody interface{}
+type GetLocationsJSONBody GeoLocationRequestData
 
 // GetLocationsJSONRequestBody defines body for GetLocations for application/json ContentType.
 type GetLocationsJSONRequestBody GetLocationsJSONBody

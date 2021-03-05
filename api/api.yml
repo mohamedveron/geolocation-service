@@ -32,6 +32,13 @@ components:
           items:
             $ref: '#/components/schemas/GeoLocation'
 
+    GeoLocationRequestData:
+      required:
+        - locations
+      properties:
+        ipAddress:
+          type: string
+
 paths:
   /locations:
     post:
@@ -41,8 +48,7 @@ paths:
         content:
           application/json:
             schema:
-              ipAddress:
-                type: string
+              $ref: '#/components/schemas/GeoLocationRequestData'
       responses:
         '200':
           description: locations list returned
