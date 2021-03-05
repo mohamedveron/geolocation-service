@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/go-chi/chi"
-	"github.com/mohamedveron/geo-location_sdk/persistence"
-	"github.com/mohamedveron/geo-location_sdk/service"
+	"github.com/mohamedveron/geolocation-service/persistence"
+	"github.com/mohamedveron/geolocation-service/service"
 	"net/http"
 )
 

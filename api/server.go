@@ -1,6 +1,6 @@
 package api
 
-import "github.com/mohamedveron/geo-location_sdk/service"
+import "github.com/mohamedveron/geolocation-service/service"
 
 type Server struct {
 	svc *service.Service

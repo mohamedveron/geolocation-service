@@ -1,6 +1,6 @@
 package service
 
-import "github.com/mohamedveron/geo-location_sdk/persistence"
+import "github.com/mohamedveron/geolocation-service/persistence"
 
 type Service struct {
 	persistence      *persistence.Persistence

@@ -2,7 +2,7 @@ package service
 
 import (
 	"encoding/csv"
-	"github.com/mohamedveron/geo-location_sdk/domains"
+	"github.com/mohamedveron/geolocation-service/domains"
 	"log"
 	"os"
 	"regexp"

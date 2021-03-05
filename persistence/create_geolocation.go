@@ -2,7 +2,7 @@ package persistence
 
 import (
 	"fmt"
-	"github.com/mohamedveron/geo-location_sdk/domains"
+	"github.com/mohamedveron/geolocation-service/domains"
 )
 
 func (db Persistence) CreateGeoLocation(row *domains.GeoLocation) error {

@@ -1,4 +1,4 @@
-module github.com/mohamedveron/geo-location_sdk
+module github.com/mohamedveron/geolocation-service
 
 go 1.13
 

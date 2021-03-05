@@ -1,7 +1,7 @@
 package persistence
 
 import (
-	"github.com/mohamedveron/geo-location_sdk/domains"
+	"github.com/mohamedveron/geolocation-service/domains"
 )
 
 func (db *Persistence) GetPhoneNumbers() ([]domains.GeoLocation, error) {

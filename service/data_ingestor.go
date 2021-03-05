@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/mohamedveron/geo-location_sdk/domains"
+	"github.com/mohamedveron/geolocation-service/domains"
 	"golang.org/x/sync/errgroup"
 	"time"
 )
