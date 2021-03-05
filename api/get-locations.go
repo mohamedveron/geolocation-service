@@ -1,7 +1,10 @@
 package api
 
-import "net/http"
+import (
+	"net/http"
+)
 
 func (s *Server) GetLocations(w http.ResponseWriter, r *http.Request) {
-	panic("implement me")
+
+	s.svc.GetLocations()
 }
