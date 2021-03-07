@@ -49,6 +49,6 @@ If you have issue with code generation in generate step you can copy the api/api
 docker build --tag geolocation-service .
 ```
 
-``bash
+```bash
 docker run -p 9090:9090 geolocation-service
 ```
