@@ -57,8 +57,6 @@ func (s *Service) RunDataIngestor(numberOfGoroutines int) (int, int, time.Durati
 		return countValid, countInValid, time.Since(startTime), fmt.Errorf("%s: %s", e, err)
 	}
 
-	fmt.Println(countInValid, " : ", countValid , time.Since(startTime) )
-
 	return countValid, countInValid, time.Since(startTime), nil
 }
 

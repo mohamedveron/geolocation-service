@@ -11,6 +11,7 @@ import (
 
 func main() {
 
+	// db configuration
 	dbSettings := persistence.DBSettings{
 		Host:     "localhost",
 		Port:     5432,
@@ -37,10 +38,10 @@ func main() {
 
 	srv := &http.Server{
 		Handler: r,
-		Addr:    ":8080",
+		Addr:    ":9090",
 	}
 
-	fmt.Println("server starting on port 8080...")
+	fmt.Println("server starting on port 9090...")
 
 	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		fmt.Println("server failed to start", "error", err)
