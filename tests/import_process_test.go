@@ -10,11 +10,11 @@ import (
 func TestImportGeolocationData(t *testing.T){
 
 	dbSettings := persistence.DBSettings{
-		Host:     "localhost",
+		Host:     "geolocation.czqumefsqwp6.eu-central-1.rds.amazonaws.com",
 		Port:     5432,
 		Username: "postgres",
-		Password: "123456",
-		DbName:   "entities",
+		Password: "123456789",
+		DbName:   "postgres",
 	}
 
 	//initialize the service layers
